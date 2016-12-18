@@ -245,9 +245,9 @@ module.exports = function(RED) {
                 return false;
             }
 
-            var attachments [{}];
+            var attachments = [{}];
             if(data.attachments) attachments=data.attachments;
-            
+
             if(channelIsWatched(data.channel, config.channels)) {
                 var output = {
                     payload: data.text,
