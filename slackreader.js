@@ -247,9 +247,13 @@ module.exports = function(RED) {
 
             if(channelIsWatched(data.channel, config.channels)) {
                 var output = {
+                    payload: data.text,
                     channel: {
                         id: data.channel,
                     },
+                    slackObj: {
+                        data: data,
+                    }
                 };
 
                 node.send(output);
