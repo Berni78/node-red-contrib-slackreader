@@ -1,6 +1,6 @@
 <script type="text/javascript">
     /* global RED */
-    RED.nodes.registerType('slackor-auditor',{
+    RED.nodes.registerType('slackreader-auditor',{
         category: 'chat',
         color: '#3FADB5',
         defaults: {
@@ -12,11 +12,11 @@
         outputs:1,
         icon: "slack.png",
         label: function() {
-            return this.name||"Slackor Auditor";
+            return this.name||"Slackreader Auditor";
         },
-        paletteLabel: "Slackor Auditor",
+        paletteLabel: "Slackreader Auditor",
     });
-    RED.nodes.registerType('slackor-speaker',{
+    RED.nodes.registerType('slackreader-speaker',{
         category: 'chat',
         color: '#3FADB5',
         defaults: {
@@ -28,14 +28,14 @@
         outputs:0,
         icon: "slack.png",
         label: function() {
-            return this.name||"Slackor Speaker";
+            return this.name||"Slackreader Speaker";
         },
-        paletteLabel: "Slackor Speaker",
+        paletteLabel: "Slackreader Speaker",
         align: 'right',
     });
 </script>
 
-<script type="text/x-red" data-template-name="slackor-auditor">
+<script type="text/x-red" data-template-name="slackreader-auditor">
     <div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name" name="node-input-name">
@@ -50,7 +50,7 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="slackor-auditor">
+<script type="text/x-red" data-help-name="slackreader-auditor">
     <h1>Listens in slack</h1>
     <p><b>Configuring behavior:</b><p>
     <ul>
@@ -59,7 +59,7 @@
 </script>
 
 
-<script type="text/x-red" data-template-name="slackor-speaker">
+<script type="text/x-red" data-template-name="slackreader-speaker">
     <div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name" name="node-input-name">
@@ -70,11 +70,11 @@
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="slackor-speaker">
+<script type="text/x-red" data-help-name="slackreader-speaker">
     <h1>Speaks in slack</h1>
     <p><b>Configuring behavior:</b><p>
     <ul>
-        <li><b>Slack Channel:</b> control the slack channel by passing the slack channel id as the <code>msg.channel.id</code> property. The Slackor Auditor node passes the id of channel in which it hears a message as the same property. Therefore, by default, the Slackor Speaker node speaks in the same channel the Slackor Auditor node hears.</li>
+        <li><b>Slack Channel:</b> control the slack channel by passing the slack channel id as the <code>msg.channel.id</code> property. The Slackreader Auditor node passes the id of channel in which it hears a message as the same property. Therefore, by default, the Slackreader Speaker node speaks in the same channel the Slackreader Auditor node hears.</li>
         <li><b>Message content:</b> pass a message via <code>msg.payload</code></li>
     </ul>
 </script>

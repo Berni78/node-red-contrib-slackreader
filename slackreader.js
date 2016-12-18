@@ -11,9 +11,9 @@ module.exports = function(RED) {
     const CLIENT_RTM_EVENTS = require('@slack/client').CLIENT_EVENTS.RTM;
 
     /**
-     * Slackor module
+     * Slackreader module
      */
-    var Slackor = (function(){
+    var Slackreader = (function(){
 
         // Expose properties & methods
         var public = {};
@@ -24,7 +24,7 @@ module.exports = function(RED) {
     /**
      * Manages SlackClients
      */
-    Slackor.Clients = (function(){
+    Slackreader.Clients = (function(){
         var _list = [];
 
         /**
@@ -39,22 +39,22 @@ module.exports = function(RED) {
 
             // Client connecting
             client.on(CLIENT_EVENTS.RTM.CONNECTING, function() {
-                PubSub.publish('slackor.client.connecting');
+                PubSub.publish('slackreader.client.connecting');
             });
 
             // Client start success
             client.on(CLIENT_EVENTS.RTM.AUTHENTICATED, function (data) {
-                PubSub.publish('slackor.client.authenticated', data);
+                PubSub.publish('slackreader.client.authenticated', data);
             });
 
             // Client start failure (may be recoverable)
             client.on(CLIENT_EVENTS.RTM.UNABLE_TO_RTM_START, function(error) {
-                PubSub.publish('slackor.client.unableToStart', error);
+                PubSub.publish('slackreader.client.unableToStart', error);
             });
 
             // Client disconnect
             client.on(CLIENT_EVENTS.RTM.DISCONNECT, function(optError, optCode) {
-                PubSub.publish('slackor.client.disconnect', {
+                PubSub.publish('slackreader.client.disconnect', {
                     optError: optError,
                     optCode: optCode,
                 });
@@ -62,12 +62,12 @@ module.exports = function(RED) {
 
             // Client connection opened
             client.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, function() {
-                PubSub.publish('slackor.client.connectionOpened');
+                PubSub.publish('slackreader.client.connectionOpened');
             });
 
             // Team received a message
             client.on(RTM_EVENTS.MESSAGE, function (message) {
-                PubSub.publish('slackor.client.message', message);
+                PubSub.publish('slackreader.client.message', message);
             });
 
 
@@ -81,7 +81,7 @@ module.exports = function(RED) {
          */
         var getByToken = function(token) {
             if(token == null || token.trim() == '') {
-                console.log('Slackor ~ no token specified');
+                console.log('Slackreader ~ no token specified');
                 return false;
             }
 
@@ -116,42 +116,42 @@ module.exports = function(RED) {
     /**
      * Logger
      */
-    Slackor.Logger = (function() {
+    Slackreader.Logger = (function() {
         var connecting = function(msg) {
-            console.log(`Slackor ~ connecting...`);
+            console.log(`Slackreader ~ connecting...`);
         };
 
         var authenticated = function(msg, data) {
-            console.log(`Slackor ~ logged in as @${data.self.name} of team ${data.team.name}`);
+            console.log(`Slackreader ~ logged in as @${data.self.name} of team ${data.team.name}`);
         };
 
         var unableToStart = function(msg, data) {
-            console.log(`Slackor ~ unable to connect`);
+            console.log(`Slackreader ~ unable to connect`);
         };
 
         var disconnect = function(msg) {
             //console.log(data.optError, data.optCode);
-            console.log(`Slackor ~ disconnected`);
+            console.log(`Slackreader ~ disconnected`);
         };
 
         var message = function(msg, data) {
-            console.log(`Slackor ~ received a message`);
+            console.log(`Slackreader ~ received a message`);
         };
 
-        PubSub.subscribe('slackor.client.disconnect', disconnect);
-        PubSub.subscribe('slackor.client.unableToStart', unableToStart);
-        PubSub.subscribe('slackor.client.connecting', connecting);
-        PubSub.subscribe('slackor.client.message', message);
-        PubSub.subscribe('slackor.client.authenticated', authenticated);
+        PubSub.subscribe('slackreader.client.disconnect', disconnect);
+        PubSub.subscribe('slackreader.client.unableToStart', unableToStart);
+        PubSub.subscribe('slackreader.client.connecting', connecting);
+        PubSub.subscribe('slackreader.client.message', message);
+        PubSub.subscribe('slackreader.client.authenticated', authenticated);
     })();
 
     /**
      * Speaker
      */
-    Slackor.Speaker = (function(config) {
+    Slackreader.Speaker = (function(config) {
         RED.nodes.createNode(this, config);
 
-        const client = Slackor.Clients.getByToken(config.apiToken);
+        const client = Slackreader.Clients.getByToken(config.apiToken);
         const node = this;
 
         var disconnect = function() {
@@ -171,8 +171,8 @@ module.exports = function(RED) {
         };
 
         var subscriptions = [
-            PubSub.subscribe('slackor.client.disconnect', disconnect),
-            PubSub.subscribe('slackor.client.connectionOpened', connectionOpened),
+            PubSub.subscribe('slackreader.client.disconnect', disconnect),
+            PubSub.subscribe('slackreader.client.connectionOpened', connectionOpened),
         ];
 
         node.on('input', function(msg) {
@@ -183,13 +183,13 @@ module.exports = function(RED) {
         });
 
         node.on('close', function() {
-            Slackor.Clients.deleteByToken(config.apiToken);
+            Slackreader.Clients.deleteByToken(config.apiToken);
             for(var s in subscriptions) {
                PubSub.unsubscribe(subscriptions[s]);
            }
         });
 
-        PubSub.subscribe('slackor.client.disconnect', disconnect);
+        PubSub.subscribe('slackreader.client.disconnect', disconnect);
 
         return node;
     });
@@ -197,10 +197,10 @@ module.exports = function(RED) {
     /**
      * Speaker
      */
-    Slackor.Auditor = (function(config) {
+    Slackreader.Auditor = (function(config) {
         RED.nodes.createNode(this, config);
 
-        var client = Slackor.Clients.getByToken(config.apiToken);
+        var client = Slackreader.Clients.getByToken(config.apiToken);
         var node = this;
 
         var channelIsWatched = function(channelId, watchList) {
@@ -257,13 +257,13 @@ module.exports = function(RED) {
         };
 
         var subscriptions = [
-            PubSub.subscribe('slackor.client.message', message),
-            PubSub.subscribe('slackor.client.disconnect', disconnect),
-            PubSub.subscribe('slackor.client.authenticated', authenticated),
+            PubSub.subscribe('slackreader.client.message', message),
+            PubSub.subscribe('slackreader.client.disconnect', disconnect),
+            PubSub.subscribe('slackreader.client.authenticated', authenticated),
         ];
 
         node.on('close', function() {
-           Slackor.Clients.deleteByToken(config.apiToken);
+           Slackreader.Clients.deleteByToken(config.apiToken);
            for(var s in subscriptions) {
                PubSub.unsubscribe(subscriptions[s]);
            }
@@ -272,6 +272,6 @@ module.exports = function(RED) {
         return node;
     });
 
-    RED.nodes.registerType("slackor-auditor", Slackor.Auditor);
-    RED.nodes.registerType("slackor-speaker", Slackor.Speaker);
+    RED.nodes.registerType("slackreader-auditor", Slackreader.Auditor);
+    RED.nodes.registerType("slackreader-speaker", Slackreader.Speaker);
 };

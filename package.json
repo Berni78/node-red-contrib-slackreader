@@ -1,5 +1,5 @@
 {
-  "name": "@berni78/node-red-contrib-slackreader",
+  "name": "node-red-contrib-slackreader",
   "version": "0.1.0",
   "description": "Slack Reader for Node-Red",
   "main": "slackreader.js",
