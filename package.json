@@ -1,0 +1,23 @@
+{
+  "name": "@berni78/node-red-contrib-slackreader",
+  "version": "0.1.0",
+  "description": "Slack Reader for Node-Red",
+  "main": "slackreader.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Berni78/node-red-contrib-slackreader.git"
+  },
+  "keywords": [
+    "Slack",
+    "Node-Red"
+  ],
+  "author": "Berni",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Berni78/node-red-contrib-slackreader/issues"
+  },
+  "homepage": "https://github.com/Berni78/node-red-contrib-slackreader#readme"
+}
