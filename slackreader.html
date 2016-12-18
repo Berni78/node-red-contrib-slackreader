@@ -1,0 +1,80 @@
+<script type="text/javascript">
+    /* global RED */
+    RED.nodes.registerType('slackor-auditor',{
+        category: 'chat',
+        color: '#3FADB5',
+        defaults: {
+            name: {value:""},
+            apiToken: {value: ""},
+            channels: {value: ""},
+        },
+        inputs:0,
+        outputs:1,
+        icon: "slack.png",
+        label: function() {
+            return this.name||"Slackor Auditor";
+        },
+        paletteLabel: "Slackor Auditor",
+    });
+    RED.nodes.registerType('slackor-speaker',{
+        category: 'chat',
+        color: '#3FADB5',
+        defaults: {
+            name: {value:""},
+            apiToken: {value: ""},
+            channel: {value: ""},
+        },
+        inputs:1,
+        outputs:0,
+        icon: "slack.png",
+        label: function() {
+            return this.name||"Slackor Speaker";
+        },
+        paletteLabel: "Slackor Speaker",
+        align: 'right',
+    });
+</script>
+
+<script type="text/x-red" data-template-name="slackor-auditor">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name" name="node-input-name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-apiToken"><i class="icon-tag"></i> API Token</label>
+        <input type="text" id="node-input-apiToken" placeholder="API Token" name="node-input-apiToken">
+    </div>
+    <div class="form-row">
+        <label for="node-input-channels"><i class="icon-tag"></i> Channels</label>
+        <input type="text" id="node-input-channels" placeholder="general, channel1, channel2" name="node-input-channels">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="slackor-auditor">
+    <h1>Listens in slack</h1>
+    <p><b>Configuring behavior:</b><p>
+    <ul>
+        <li><b>Slack Channels:</b> you can control which slack channels are listened to by specifying them in the node's configuration properties. Seperate multiple channels by commas without spaces. (i.e: general,channel1,channel2).<br/><b>Note:</b> This node can only listen to channels in which the associated Slack Bot has been invited.</li>
+    </ul>
+</script>
+
+
+<script type="text/x-red" data-template-name="slackor-speaker">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name" name="node-input-name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-apiToken"><i class="icon-tag"></i> API Token</label>
+        <input type="text" id="node-input-apiToken" placeholder="API Token" name="node-input-apiToken">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="slackor-speaker">
+    <h1>Speaks in slack</h1>
+    <p><b>Configuring behavior:</b><p>
+    <ul>
+        <li><b>Slack Channel:</b> control the slack channel by passing the slack channel id as the <code>msg.channel.id</code> property. The Slackor Auditor node passes the id of channel in which it hears a message as the same property. Therefore, by default, the Slackor Speaker node speaks in the same channel the Slackor Auditor node hears.</li>
+        <li><b>Message content:</b> pass a message via <code>msg.payload</code></li>
+    </ul>
+</script>
