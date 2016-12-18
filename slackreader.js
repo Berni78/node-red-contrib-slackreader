@@ -245,6 +245,9 @@ module.exports = function(RED) {
                 return false;
             }
 
+            var attachments [{}];
+            if(data.attachments) attachments=data.attachments;
+            
             if(channelIsWatched(data.channel, config.channels)) {
                 var output = {
                     payload: data.text,
@@ -253,6 +256,9 @@ module.exports = function(RED) {
                     },
                     slackObj: {
                         data: data,
+                        ts: data.ts,
+                        user: data.user,
+                        attachments: attachments,
                     }
                 };
 
