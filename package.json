@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-slackreader",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Slack Reader for Node-Red",
   "main": "slackreader.js",
   "scripts": {
@@ -11,9 +11,17 @@
     "url": "git+https://github.com/Berni78/node-red-contrib-slackreader.git"
   },
   "keywords": [
-    "Slack",
-    "Node-Red"
+    "Slack"
   ],
+  "dependencies": {
+  "@slack/client": "^3.5.4",
+  "pubsub-js": "^1.5.3"
+  },
+  "node-red": {
+    "nodes": {
+      "slackreader": "slackreader.js"
+    }
+  },
   "author": "Berni",
   "license": "MIT",
   "bugs": {
