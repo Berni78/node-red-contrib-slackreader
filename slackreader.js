@@ -247,7 +247,6 @@ module.exports = function(RED) {
                 return false;
             }
 
-            var attach = {};
             if(data.attachments) attach=data.attachments;
 
             if(channelIsWatched(data.channel, config.channels)) {
