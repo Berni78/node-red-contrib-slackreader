@@ -64,6 +64,7 @@ module.exports = function(RED) {
             // Client connection opened
             client.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, function() {
                 PubSub.publish('slackreader.client.connectionOpened');
+                // Read History message
             });
 
             // Team received a message
@@ -246,8 +247,8 @@ module.exports = function(RED) {
                 return false;
             }
 
-            var attachments = {};
-            if(data.attachments) attachments=data.attachments;
+            var attach = {};
+            if(data.attachments) attach=data.attachments;
 
             if(channelIsWatched(data.channel, config.channels)) {
                 var output = {
@@ -261,7 +262,7 @@ module.exports = function(RED) {
                     slackObj: {
                         ts: data.ts,
                         user: data.user,
-                        attachments: attachments,
+                        attachments: attach,
                     }
                 };
 
