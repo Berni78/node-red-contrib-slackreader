@@ -81,13 +81,13 @@ module.exports = function(RED) {
          * Retrieves a client by API token
          */
         var getByToken = function(token) {
-            if(token === null || token.trim() === '') {
+            if(token == null || token.trim() == '') {
                 console.log('Slackreader ~ no token specified');
                 return false;
             }
 
             // Create a new client if it doesn't already exist
-            if(_list[token] === null) {
+            if(_list[token] == null) {
                 _list[token] = _create(token);
             }
 
@@ -99,7 +99,7 @@ module.exports = function(RED) {
          */
         var deleteByToken = function(token) {
             // Disconnet & remove from the client list
-            if(_list[token] !== null) {
+            if(_list[token] != null) {
                 _list[token].disconnect();
                 _list[token] = null;
             }
@@ -177,7 +177,7 @@ module.exports = function(RED) {
         ];
 
         node.on('input', function(msg) {
-            if(msg.payload === null || msg.payload.trim() === '') {
+            if(msg.payload == null || msg.payload.trim() == '') {
                 msg.payload = 'Nothing was specified, please pass a payload property to the msg object';
             }
             client.sendMessage(msg.payload, msg.channel.id);
@@ -205,7 +205,7 @@ module.exports = function(RED) {
         var node = this;
 
         var channelIsWatched = function(channelId, watchList) {
-            if(watchList !== null && watchList.trim() !== '') { // Listen only on specified channels
+            if(watchList != null && watchList.trim() != '') { // Listen only on specified channels
                 if(channelId.substr(0,1) == 'D') {
                     return true;
                 }
@@ -242,7 +242,7 @@ module.exports = function(RED) {
         var message = function(msg, data) {
 
             // Ignore deleted messages
-            if(data.subtype !== null && data.subtype == 'message_deleted') {
+            if(data.subtype != null && data.subtype == 'message_deleted') {
                 return false;
             }
 
