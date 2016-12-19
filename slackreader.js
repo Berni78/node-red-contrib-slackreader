@@ -246,7 +246,7 @@ module.exports = function(RED) {
             if(data.subtype != null && data.subtype == 'message_deleted') {
                 return false;
             }
-
+            var attach = [{}];
             if(data.attachments) attach=data.attachments;
 
             if(channelIsWatched(data.channel, config.channels)) {
