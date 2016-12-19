@@ -246,8 +246,8 @@ module.exports = function(RED) {
             if(data.subtype != null && data.subtype == 'message_deleted') {
                 return false;
             }
-            var attach = [{}];
-            if(data.attachments) attach=data.attachments;
+
+            if(data.attachments) attach=JSON.stringify(data.attachments);
 
             if(channelIsWatched(data.channel, config.channels)) {
                 var output = {
@@ -261,7 +261,7 @@ module.exports = function(RED) {
                     slackObj: {
                         ts: data.ts,
                         user: data.user,
-                        attachments: attach,
+                        attachments: JSON.parse(attach),
                     }
                 };
 
