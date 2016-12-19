@@ -255,7 +255,7 @@ module.exports = function(RED) {
                         id: data.channel,
                     },
                     rawmsg = {
-                      data: data
+                      message: data,
                     },
                     slackObj: {
                         ts: data.ts,
