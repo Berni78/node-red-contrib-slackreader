@@ -6,7 +6,7 @@ module.exports = function(RED) {
 
     const SlackClient       = require('@slack/client').RtmClient;
     const MemoryDataStore   = require('@slack/client').MemoryDataStore;
-    const SlackSearch       = require('@slack/client').SearchFacet;
+    const SlackSearch       = require('@slack/client').SearchFacet.messages;
 
     const CLIENT_EVENTS     = require('@slack/client').CLIENT_EVENTS;
     const RTM_EVENTS        = require('@slack/client').RTM_EVENTS;
@@ -38,7 +38,7 @@ module.exports = function(RED) {
                 logLevel: 'none',
                 dataStore: new MemoryDataStore(),
             });
-            var search = new SlackSearch();
+            var search = new SlackSearch(query);
 
             // Client connecting
             client.on(CLIENT_EVENTS.RTM.CONNECTING, function() {
@@ -341,7 +341,7 @@ module.exports = function(RED) {
 
         var history = function() {
 
-          msg = search.message('camembert');
+          msg = client.search('camembert');
           console.log('SlackSearch '+msg);
 
             // Ignore deleted messages
