@@ -113,7 +113,7 @@ module.exports = function(RED) {
         var search = function(query) {
           history = SearchFacet.messages(query);
           return history;
-        }
+        };
         // Expose properties & methods
         var public = {};
 
