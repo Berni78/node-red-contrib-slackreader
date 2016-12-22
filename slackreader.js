@@ -63,8 +63,10 @@ module.exports = function(RED) {
             });
 
             // Client connection opened
-            client.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, function(history) {
+            client.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, function() {
                 PubSub.publish('slackreader.client.connectionOpened');
+                PubSub.publish('slackreader.client.history');
+
                 // Read History message
             });
 
