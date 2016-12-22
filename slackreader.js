@@ -6,6 +6,7 @@ module.exports = function(RED) {
 
     const SlackClient       = require('@slack/client').RtmClient;
     const MemoryDataStore   = require('@slack/client').MemoryDataStore;
+    const SlackSearch       = require('@slack/client').SearchFacet;
 
     const CLIENT_EVENTS     = require('@slack/client').CLIENT_EVENTS;
     const RTM_EVENTS        = require('@slack/client').RTM_EVENTS;
@@ -62,7 +63,7 @@ module.exports = function(RED) {
             });
 
             // Client connection opened
-            client.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, function() {
+            client.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, function(history) {
                 PubSub.publish('slackreader.client.connectionOpened');
                 // Read History message
             });
@@ -140,10 +141,15 @@ module.exports = function(RED) {
             console.log(`Slackreader ~ received a message`);
         };
 
+        var history = function(msg, data) {
+            console.log(`Slackreader ~ Search received a message`);
+        };
+
         PubSub.subscribe('slackreader.client.disconnect', disconnect);
         PubSub.subscribe('slackreader.client.unableToStart', unableToStart);
         PubSub.subscribe('slackreader.client.connecting', connecting);
         PubSub.subscribe('slackreader.client.message', message);
+        PubSub.subscribe('slackreader.client.history', history);
         PubSub.subscribe('slackreader.client.authenticated', authenticated);
     })();
 
@@ -197,7 +203,7 @@ module.exports = function(RED) {
     });
 
     /**
-     * Speaker
+     * Auditor
      */
     Slackreader.Auditor = (function(config) {
         RED.nodes.createNode(this, config);
@@ -247,9 +253,9 @@ module.exports = function(RED) {
                 return false;
             }
 
-            if(data.attachments) attach=JSON.stringify(data.attachments);
 
             if(channelIsWatched(data.channel, config.channels)) {
+                if(data.attachments) attach=JSON.stringify(data.attachments);
                 var output = {
                     payload: data.text,
                     channel: {
@@ -262,10 +268,104 @@ module.exports = function(RED) {
                         ts: data.ts,
                         user: data.user,
                         attachments: JSON.parse(attach),
+                        commit: "NO"
                     }
                 };
 
                 node.send(output);
+            }
+        };
+
+        var subscriptions = [
+            PubSub.subscribe('slackreader.client.message', message),
+            PubSub.subscribe('slackreader.client.disconnect', disconnect),
+            PubSub.subscribe('slackreader.client.authenticated', authenticated),
+        ];
+
+        node.on('close', function() {
+           Slackreader.Clients.deleteByToken(config.apiToken);
+           for(var s in subscriptions) {
+               PubSub.unsubscribe(subscriptions[s]);
+           }
+        });
+
+        return node;
+    });
+
+    /**
+     * History search
+     */
+    Slackreader.History = (function(config) {
+        RED.nodes.createNode(this, config);
+
+        var client = Slackreader.Clients.getByToken(config.apiToken);
+        var node = this;
+
+        var channelIsWatched = function(channelId, watchList) {
+            if(watchList != null && watchList.trim() != '') { // Listen only on specified channels
+                if(channelId.substr(0,1) == 'D') {
+                    return true;
+                }
+                var watchedChannels = config.channels.split(',');
+                for(var i = 0, m = watchedChannels.length; i < m; i++) {
+                    var channel = client.dataStore.getChannelOrGroupByName(watchedChannels[i]);
+                    if(channelId == channel.id) {
+                        return true;
+                    }
+                }
+            } else { // Listen on all channels
+                return true;
+            }
+            return false;
+        };
+
+        var disconnect = function() {
+            node.status({
+                fill: "red",
+                shape: "dot",
+                text: "disconnected",
+            });
+        };
+
+        var authenticated = function() {
+
+            node.status({
+                fill: "green",
+                shape: "dot",
+                text: "connected",
+            });
+        };
+
+        var history = function(msg, data) {
+
+          msg = SlackSearch.message('camembert');
+          console.log('SlackSearch '+msg);
+
+            // Ignore deleted messages
+            if(data.subtype != null && data.subtype == 'message_deleted') {
+                return false;
+            }
+
+
+            if(channelIsWatched(data.channel, config.channels)) {
+                if(data.attachments) attach=JSON.stringify(data.attachments);
+                var output = {
+                    payload: data.text,
+                    channel: {
+                        id: data.channel,
+                    },
+                    rawmsg : {
+                      message: data,
+                    },
+                    slackObj: {
+                        ts: data.ts,
+                        user: data.user,
+                        attachments: JSON.parse(attach),
+                        commit: "NO"
+                    }
+                };
+
+                node.send(msg);
             }
         };
 

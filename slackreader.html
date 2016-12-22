@@ -33,6 +33,23 @@
         paletteLabel: "Slackreader Speaker",
         align: 'right',
     });
+    RED.nodes.registerType('slackreader-history',{
+        category: 'chat',
+        color: '#3FADB5',
+        defaults: {
+            name: {value:""},
+            apiToken: {value: ""},
+            channel: {value: ""},
+        },
+        inputs:1,
+        outputs:0,
+        icon: "slack.png",
+        label: function() {
+            return this.name||"Slackreader History";
+        },
+        paletteLabel: "Slackreader History",
+        align: 'right',
+    });
 </script>
 
 <script type="text/x-red" data-template-name="slackreader-auditor">
@@ -54,10 +71,17 @@
     <h1>Listens in slack</h1>
     <p><b>Configuring behavior:</b><p>
     <ul>
-        <li><b>Slack Channels:</b> you can control which slack channels are listened to by specifying them in the node's configuration properties. Seperate multiple channels by commas without spaces. (i.e: general,channel1,channel2).<br/><b>Note:</b> This node can only listen to channels in which the associated Slack Bot has been invited.</li>
+        <li><b>Slack Channels:</b> you can control which slack channels are listened to by specifying them in the node''s configuration properties. Seperate multiple channels by commas without spaces. (i.e: general,channel1,channel2).<br/><b>Note:</b> This node can only listen to channels in which the associated Slack Bot has been invited.</li>
     </ul>
 </script>
 
+<script type="text/x-red" data-help-name="slackreader-history">
+    <h1>Search in slack</h1>
+    <p><b>Configuring behavior:</b><p>
+    <ul>
+        <li><b>Slack Channels:</b> you can control which slack channels are listened to by specifying them in the node''s configuration properties. Seperate multiple channels by commas without spaces. (i.e: general,channel1,channel2).<br/><b>Note:</b> This node can only search to channels in which the associated Slack Bot has been invited.</li>
+    </ul>
+</script>
 
 <script type="text/x-red" data-template-name="slackreader-speaker">
     <div class="form-row">
