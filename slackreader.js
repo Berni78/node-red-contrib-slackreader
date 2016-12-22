@@ -141,7 +141,7 @@ module.exports = function(RED) {
             console.log(`Slackreader ~ received a message`);
         };
 
-        var history = function(msg, data) {
+        var history = function() {
             console.log(`Slackreader ~ Search received a message`);
         };
 
