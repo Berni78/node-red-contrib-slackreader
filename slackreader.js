@@ -38,6 +38,7 @@ module.exports = function(RED) {
                 logLevel: 'none',
                 dataStore: new MemoryDataStore(),
             });
+            var search = new SlackSearch();
 
             // Client connecting
             client.on(CLIENT_EVENTS.RTM.CONNECTING, function() {
@@ -340,7 +341,7 @@ module.exports = function(RED) {
 
         var history = function() {
 
-          msg = SlackSearch.message('camembert');
+          msg = search.message('camembert');
           console.log('SlackSearch '+msg);
 
             // Ignore deleted messages
