@@ -63,7 +63,7 @@ module.exports = function(RED) {
             });
 
             // Client connection opened
-            client.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, function(history) {
+            client.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, function() {
                 PubSub.publish('slackreader.client.connectionOpened');
                 // Read History message
             });
@@ -336,7 +336,7 @@ module.exports = function(RED) {
             });
         };
 
-        var history = function(msg, data) {
+        var history = function() {
 
           msg = SlackSearch.message('camembert');
           console.log('SlackSearch '+msg);
@@ -370,7 +370,7 @@ module.exports = function(RED) {
         };
 
         var subscriptions = [
-            PubSub.subscribe('slackreader.client.message', message),
+            PubSub.subscribe('slackreader.client.history', history),
             PubSub.subscribe('slackreader.client.disconnect', disconnect),
             PubSub.subscribe('slackreader.client.authenticated', authenticated),
         ];
@@ -387,4 +387,6 @@ module.exports = function(RED) {
 
     RED.nodes.registerType("slackreader-auditor", Slackreader.Auditor);
     RED.nodes.registerType("slackreader-speaker", Slackreader.Speaker);
+    RED.nodes.registerType("slackreader-history", Slackreader.History);
+
 };
