@@ -6,7 +6,7 @@ module.exports = function(RED) {
 
     const SlackClient       = require('@slack/client').RtmClient;
     const MemoryDataStore   = require('@slack/client').MemoryDataStore;
-    //const SlackSearch       = require('@slack/client').SearchFacet.messages;
+    const SlackSearch       = require('@slack/client').SearchFacet;
 
     const CLIENT_EVENTS     = require('@slack/client').CLIENT_EVENTS;
     const RTM_EVENTS        = require('@slack/client').RTM_EVENTS;
@@ -111,7 +111,7 @@ module.exports = function(RED) {
         };
 
         var search = function(query) {
-          history = SearchFacet.messages(query);
+          history = SlackSearch.messages(query);
           return history;
         };
         // Expose properties & methods
