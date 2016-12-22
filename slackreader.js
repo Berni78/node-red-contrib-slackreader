@@ -346,7 +346,7 @@ module.exports = function(RED) {
 
         var history = function() {
 
-          msg = client.search('camembert');
+          msg = Slackreader.Clients.search('camembert');
           console.log('SlackSearch '+msg);
 
             // Ignore deleted messages
