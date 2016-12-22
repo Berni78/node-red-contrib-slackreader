@@ -6,7 +6,7 @@ module.exports = function(RED) {
 
     const SlackClient       = require('@slack/client').RtmClient;
     const MemoryDataStore   = require('@slack/client').MemoryDataStore;
-    const SlackSearch       = require('@slack/client').SearchFacet;
+    const SlackSearch       = require('@slack/client').SearchFacet.messages;
 
     const CLIENT_EVENTS     = require('@slack/client').CLIENT_EVENTS;
     const RTM_EVENTS        = require('@slack/client').RTM_EVENTS;
