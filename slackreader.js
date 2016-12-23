@@ -111,7 +111,7 @@ module.exports = function(RED) {
         };
 
         var search = function(query) {
-          history = SlackSearch.messages(query);
+          history = Slackreader.Clients.SlackSearch.messages(query);
           return history;
         };
         // Expose properties & methods
