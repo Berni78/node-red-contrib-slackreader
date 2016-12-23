@@ -111,8 +111,12 @@ module.exports = function(RED) {
         };
 
         var search = function(query) {
-          history = Slackreader.Clients.search.messages(query);
-          return history;
+          var opts = {
+            sort: 'timestamp',
+          };
+          history = Slackreader.Clients.search.messages(query,opts,function() {
+                return history;
+              });
         };
         // Expose properties & methods
         var public = {};
